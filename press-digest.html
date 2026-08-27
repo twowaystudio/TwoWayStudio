@@ -1,0 +1,60 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Bodobodo · 국내 정부·언론 보도자료 헤드라인을 매일 아침 이메일로 받아보세요."><title>Bodobodo · TwoWayStudio</title><link rel="stylesheet" href="styles.css"></head><body>
+<header class="site-header"><a class="brand" href="index.html"><img src="TwoWayStudio_Logo.png" alt=""><span>TwoWayStudio</span></a><nav class="site-nav" aria-label="주요 메뉴"><a href="index.html">Home</a><a href="mailto:twowaystudio56@gmail.com">Contact</a></nav></header>
+<main class="page"><article class="document">
+<p class="eyebrow">Bodobodo · 보도자료 다이제스트</p>
+<h1>매일 아침 8시,<br>보도자료 헤드라인만</h1>
+<p class="lead">정부·공공기관 보도자료와 언론사 뉴스와이어를 매일 새벽 수집해, 헤드라인과 링크만 담은 이메일을 아침 8시에 보내드립니다. 요약이나 AI가 쓴 문장이 아니라 원문 그대로의 헤드라인입니다.</p>
+
+<h2>구독 신청</h2>
+<form id="signup-form" class="subscribe-form" method="POST" target="hidden-frame" action="https://script.google.com/macros/s/AKfycbwreTLxf04jkjcBzEqwqPuT2FAJxahKXcpoHLc3ybjSpOzo1xKlc4ioUx6ZTLaEaz2-/exec">
+  <div class="field">
+    <label for="email">이메일 주소</label>
+    <input type="email" id="email" name="email" placeholder="you@example.com" required>
+  </div>
+  <div class="field">
+    <label for="keywords">관심 키워드 (선택)</label>
+    <input type="text" id="keywords" name="keywords" placeholder="예: 보건복지부, 과학기술정보통신부">
+    <p class="hint">쉼표로 구분해 입력하세요. 비워두면 모든 보도자료를 받습니다. 신청 후에도 이메일로 요청하시면 언제든 바꿔드립니다.</p>
+  </div>
+  <!-- 스팸 방지용 허니팟: 실제 사용자에게는 보이지 않음, 봇이 채우면 서버에서 무시 처리 -->
+  <div class="field honeypot" aria-hidden="true">
+    <label for="website">웹사이트</label>
+    <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+  </div>
+  <button type="submit" id="submit-btn">구독 신청</button>
+  <p id="form-message" class="form-message" role="status"></p>
+</form>
+<p class="hint" style="margin-top:14px">신청 시 입력하신 이메일은 다이제스트 발송 목적으로만 사용됩니다. 수신을 원치 않으시면 매 메일 하단의 수신거부 링크를 이용하시거나, <a href="mailto:twowaystudio56@gmail.com">twowaystudio56@gmail.com</a>으로 알려주세요.</p>
+
+<h2>어떤 내용이 오나요</h2>
+<p>대한민국 정책브리핑(정부 통합 보도자료), 뉴시스, 연합뉴스에서 수집한 헤드라인이 발행처별로 정리되어 도착합니다. 요약 없이 제목과 원문 링크만 담겨 있어, 관심 있는 것만 눌러 바로 확인할 수 있습니다.</p>
+
+<iframe name="hidden-frame" style="display:none" onload="handleFrameLoad()"></iframe>
+<script>
+  let submitted = false;
+  const form = document.getElementById('signup-form');
+  const btn = document.getElementById('submit-btn');
+  const msg = document.getElementById('form-message');
+
+  form.addEventListener('submit', function () {
+    if (form.action.indexOf('PASTE_YOUR_APPS_SCRIPT_EXEC_URL_HERE') !== -1) {
+      console.warn('press-digest.html: form action이 아직 Apps Script 배포 URL로 교체되지 않았습니다.');
+    }
+    submitted = true;
+    btn.disabled = true;
+    btn.textContent = '신청 처리 중…';
+    msg.className = 'form-message';
+  });
+
+  function handleFrameLoad() {
+    if (!submitted) return; // 페이지 최초 로드 시 iframe의 about:blank 로드는 무시
+    submitted = false;
+    msg.textContent = '구독 신청이 완료되었습니다. 매일 아침 8시에 보내드릴게요!';
+    msg.className = 'form-message show success';
+    form.reset();
+    btn.disabled = false;
+    btn.textContent = '구독 신청';
+  }
+</script>
+</article></main>
+<footer class="site-footer">© 2026 GeewooPark · TwoWayStudio</footer></body></html>
