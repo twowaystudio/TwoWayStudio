@@ -6,7 +6,7 @@
 <p class="lead">이메일을 입력하시면 현재 등록된 키워드를 확인할 수 있어요. 새 키워드를 입력하고 수정 버튼을 누르면 다음 발송부터 바로 반영됩니다.</p>
 
 <h2>키워드 수정</h2>
-<form id="edit-form" class="subscribe-form" method="POST" target="hidden-frame" action="https://script.google.com/macros/s/AKfycbwreTLxf04jkjcBzEqwqPuT2FAJxahKXcpoHLc3ybjSpOzo1xKlc4ioUx6ZTLaEaz2-/exec">
+<form id="edit-form" class="subscribe-form" method="POST" action="https://script.google.com/macros/s/AKfycbwreTLxf04jkjcBzEqwqPuT2FAJxahKXcpoHLc3ybjSpOzo1xKlc4ioUx6ZTLaEaz2-/exec">
   <div class="field">
     <label for="email">이메일 주소</label>
     <input type="email" id="email" name="email" placeholder="you@example.com" required>
@@ -31,11 +31,9 @@
 </form>
 <p class="hint" style="margin-top:14px">구독하신 적이 없는 이메일로 제출하시면 이 이메일로 새로 구독 신청됩니다. 문의는 <a href="mailto:twowaystudio56@gmail.com">twowaystudio56@gmail.com</a>으로 알려주세요.</p>
 
-<iframe name="hidden-frame" style="display:none" onload="handleFrameLoad()"></iframe>
 <script>
   const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwreTLxf04jkjcBzEqwqPuT2FAJxahKXcpoHLc3ybjSpOzo1xKlc4ioUx6ZTLaEaz2-/exec';
 
-  let submitted = false;
   const form = document.getElementById('edit-form');
   const btn = document.getElementById('submit-btn');
   const msg = document.getElementById('form-message');
@@ -78,21 +76,37 @@
     lookupKeywords(emailInput.value.trim().toLowerCase());
   });
 
-  form.addEventListener('submit', function () {
-    submitted = true;
+  // 예전에는 숨긴 iframe에 폼을 제출해서 서버 응답을 못 읽고 "제출됐다 = 성공"으로
+  // 처리했다. Apps Script의 /exec 응답은 302로 script.googleusercontent.com으로
+  // 리다이렉트되고, 그 리다이렉트 대상이 CORS 헤더를 내려주므로 커스텀 헤더 없는
+  // 폼 인코딩 POST(simple request)로 보내면 fetch()로 실제 응답을 읽을 수 있다.
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
     btn.disabled = true;
     btn.textContent = '수정 처리 중…';
     msg.className = 'form-message';
-  });
 
-  function handleFrameLoad() {
-    if (!submitted) return; // 페이지 최초 로드 시 iframe의 about:blank 로드는 무시
-    submitted = false;
-    msg.textContent = '키워드가 수정되었습니다. 다음 발송부터 반영됩니다.';
-    msg.className = 'form-message show success';
-    btn.disabled = false;
-    btn.textContent = '키워드 수정';
-  }
+    const body = new URLSearchParams(new FormData(form));
+    fetch(form.action, { method: 'POST', body: body })
+      .then(function (res) { return res.text(); })
+      .then(function (text) {
+        if (text === 'invalid email') {
+          msg.textContent = '이메일 주소를 다시 확인해주세요.';
+          msg.className = 'form-message show error';
+          return;
+        }
+        msg.textContent = '키워드가 수정되었습니다. 다음 발송부터 반영됩니다.';
+        msg.className = 'form-message show success';
+      })
+      .catch(function () {
+        msg.textContent = '수정 처리 중 문제가 생겼습니다. 잠시 후 다시 시도해주시거나, twowaystudio56@gmail.com으로 알려주세요.';
+        msg.className = 'form-message show error';
+      })
+      .finally(function () {
+        btn.disabled = false;
+        btn.textContent = '키워드 수정';
+      });
+  });
 </script>
 </article></main>
 <footer class="site-footer">© 2026 GeewooPark · TwoWayStudio</footer></body></html>
