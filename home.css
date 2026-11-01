@@ -53,7 +53,6 @@ body.home{--home-ink:#15191c;--home-muted:#6e7478;--home-line:#d6d9dc;--home-pap
 .work-detail{margin:18px 0 0;padding-top:17px;border-top:1px solid rgba(31,41,40,.17);color:var(--home-muted);font-size:.78rem;line-height:1.7}
 .work-links{display:flex;flex-wrap:wrap;gap:3px 13px;margin-top:auto;padding-top:20px}
 .work-links .button-link{min-height:29px;font-size:.77rem}
-.work-link-note{display:inline-flex;min-height:29px;align-items:center;color:var(--home-muted);font-size:.77rem;font-weight:700}
 .work-links .work-link-primary{padding:0 11px;border-radius:999px;background:var(--home-navy);color:#fff;text-decoration:none}
 .work-links .work-link-primary::after{color:rgba(255,255,255,.72)}
 .work-links .work-link-primary:hover{background:#2d5178;color:#fff}
